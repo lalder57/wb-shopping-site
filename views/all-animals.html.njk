@@ -13,9 +13,9 @@
       </a>
 
       <div class="card-body">
-        <h5 class="card-title">Bear</h5>
-        <div class="price card-text">$15.00</div>
-        <a class="btn btn-primary" href="/animal-details/bear">Details</a>
+        <h5 class="card-title">{{ animal.name }}</h5>
+        <div class="price card-text">{{ animal.price.toFixed(2) }}</div>
+        <a class="btn btn-primary" href="/animal-details/{{ animal.animal_id }}">Details</a>
       </div>
 
     </div>
