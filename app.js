@@ -76,11 +76,11 @@ app.get('/cart', (req, res) => {
   let orderTotal = 0;
 
    // loop over the cart object, and for each animal id:
-  for (const animalId in cart) {
+  for (const animal in cart) {
     //   get the animal object by calling getAnimalDetails
-    const animalDetails = getAnimalDetails(animalId);
+    const animalDetails = getAnimalDetails(animal);
     // add quantity and total cost as properties on the animal object
-    const quantity = cart[animalId];
+    const quantity = cart[animal];
     animalDetails.quantity = quantity;
 
     //  compute the total cost for that type of animal
@@ -98,6 +98,8 @@ app.get('/cart', (req, res) => {
     // pass the total order cost and the array of animal objects to the template
     animals: animals, 
     orderTotal: orderTotal,
+    username: req.session.username,
+    name: req.session.name,
   });
 });
 
@@ -109,12 +111,35 @@ app.get('/checkout', (req, res) => {
 
 app.get('/login', (req, res) => {
   // TODO: Implement this
-  res.send('Login has not been implemented yet!');
+  res.render("login.html.njk");
 });
 
 app.post('/process-login', (req, res) => {
-  // TODO: Implement this
-  res.send('Login has not been implemented yet!');
+
+  // do the username and password match one of the 
+  // username and passwords from the users object?
+  const {username} = req.body;
+  const {password} = req.body;
+  const {name} = req.body;
+
+  for (const user of users) {
+    if (username === user.username && password === user.password) {
+      req.session.username = user.username;
+      req.session.name = user.name;
+      res.redirect("/all-animals");
+      return;
+    }
+  }
+  res.render("login.html.njk", { message: 'Invalid username or password' });
+});
+
+app.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.log(err);
+    }
+    res.redirect("/all-animals");
+  });
 });
 
 app.listen(port, () => {

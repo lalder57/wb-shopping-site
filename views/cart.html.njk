@@ -1,6 +1,13 @@
 {% extends 'base.html.njk' %}
 
 {% block body %}
+
+  {% if name %}
+    <p>{{ name }}'s Cart</p>
+  {% else %}
+    <p>Hello</p>
+  {% endif %}
+
 <table class="table table-striped mt-3">
   <thead>
     <tr>
